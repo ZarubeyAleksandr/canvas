@@ -10741,10 +10741,10 @@ var Canvas = function (_Component) {
     key: 'saveClick',
     value: function saveClick() {
 
-      if (typeof Storage !== "undefined") {
+      if (tempArray.length > 0) {
         var ObjLines = JSON.stringify(tempArray);
         localStorage.setItem("drawLines", ObjLines);
-      }
+      } else alert('no items to save');
     }
     // **************************************************
 

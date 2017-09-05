@@ -175,10 +175,10 @@ canvasMove (e) {
 // ************************************************** 
   saveClick() {
 
-    if (typeof(Storage) !== "undefined") {
+    if (tempArray.length >0) {
       let ObjLines = JSON.stringify(tempArray);
       localStorage.setItem("drawLines", ObjLines);
-    }
+    } else alert ('no items to save')
 
   }
 // **************************************************
