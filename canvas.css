@@ -1,0 +1,16 @@
+.canvas{
+	margin: 0;
+	padding: 0;
+	cursor: crosshair;
+	border:1px solid #000000;
+}
+.modalCanvas {
+    text-align: center;
+    
+}
+
+.modalCanvas input {
+    margin-left: 10px;
+    width: 100px;
+}
+
