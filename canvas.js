@@ -35,6 +35,7 @@ class Canvas extends Component {
       heightCanvas: 480
     };
     this.canvasDrow = this.canvasDrow.bind(this);
+    this.canvasMove = this.canvasMove.bind(this);
     this.canvasClick = this.canvasClick.bind(this);
     this.widthChange = this.widthChange.bind(this);
     this.colorChange = this.colorChange.bind(this);
@@ -118,6 +119,22 @@ class Canvas extends Component {
     
 }
 
+canvasMove (e) {
+  if (mouse.x !== -1 && mouse.y !== -1) {
+    this.updateCanvas();
+    const ctx = this.refs.canvas.getContext("2d");
+    ctx.beginPath();
+    ctx.moveTo(mouse.x,mouse.y);
+    ctx.lineTo(e.pageX,e.pageY);
+    ctx.lineWidth = document.getElementById('lineWidth').value;
+    ctx.strokeStyle = document.getElementById('lineColor').value;
+    ctx.closePath();
+    ctx.stroke();
+  }
+
+}
+
+
 // **************************************************
   widthChange(e) {
     if (e.target.value >0){
@@ -157,14 +174,16 @@ class Canvas extends Component {
   }
 // ************************************************** 
   saveClick() {
-    if (tempArray.length >0) { 
+    console.log(typeof(Storage));
+    if (typeof(Storage) !== "undefined") {
       let ObjLines = JSON.stringify(tempArray);
       localStorage.setItem("drawLines", ObjLines);
-    } else alert('no items');
+    }
+
   }
 // **************************************************
   openClick(){
-    if (tempArray.length >0) { 
+    if (localStorage.getItem("drawLines")) { 
       let ObjLines = localStorage.getItem("drawLines");
       arrLines = JSON.parse(ObjLines);
       arrLength = 0;
@@ -215,7 +234,7 @@ class Canvas extends Component {
     return (
       <div className="CanvasApp">
     
-          <canvas className = 'canvas' ref="canvas" width={this.state.widthCanvas} height={this.state.heightCanvas} onClick = {this.canvasClick}/>
+          <canvas className = 'canvas' ref="canvas" width={this.state.widthCanvas} height={this.state.heightCanvas} onClick = {this.canvasClick} onMouseMove = {this.canvasMove}/>
           <div>
             <input id="lineWidth" type="number" value={this.state.widthLines} onChange={this.widthChange} />
             <input id="lineColor" type="color" value={this.state.colorLines} onChange={this.colorChange} />

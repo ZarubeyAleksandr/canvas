@@ -10521,6 +10521,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 "use strict";
 
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = __webpack_require__(32);
@@ -10581,6 +10583,7 @@ var Canvas = function (_Component) {
       heightCanvas: 480
     };
     _this.canvasDrow = _this.canvasDrow.bind(_this);
+    _this.canvasMove = _this.canvasMove.bind(_this);
     _this.canvasClick = _this.canvasClick.bind(_this);
     _this.widthChange = _this.widthChange.bind(_this);
     _this.colorChange = _this.colorChange.bind(_this);
@@ -10668,6 +10671,21 @@ var Canvas = function (_Component) {
         mouse.y = e.pageY;
       }
     }
+  }, {
+    key: 'canvasMove',
+    value: function canvasMove(e) {
+      if (mouse.x !== -1 && mouse.y !== -1) {
+        this.updateCanvas();
+        var ctx = this.refs.canvas.getContext("2d");
+        ctx.beginPath();
+        ctx.moveTo(mouse.x, mouse.y);
+        ctx.lineTo(e.pageX, e.pageY);
+        ctx.lineWidth = document.getElementById('lineWidth').value;
+        ctx.strokeStyle = document.getElementById('lineColor').value;
+        ctx.closePath();
+        ctx.stroke();
+      }
+    }
 
     // **************************************************
 
@@ -10724,17 +10742,18 @@ var Canvas = function (_Component) {
   }, {
     key: 'saveClick',
     value: function saveClick() {
-      if (tempArray.length > 0) {
+      console.log(typeof Storage === 'undefined' ? 'undefined' : _typeof(Storage));
+      if (typeof Storage !== "undefined") {
         var ObjLines = JSON.stringify(tempArray);
         localStorage.setItem("drawLines", ObjLines);
-      } else alert('no items');
+      }
     }
     // **************************************************
 
   }, {
     key: 'openClick',
     value: function openClick() {
-      if (tempArray.length > 0) {
+      if (localStorage.getItem("drawLines")) {
         var ObjLines = localStorage.getItem("drawLines");
         arrLines = JSON.parse(ObjLines);
         arrLength = 0;
@@ -10801,7 +10820,7 @@ var Canvas = function (_Component) {
       return _react2.default.createElement(
         'div',
         { className: 'CanvasApp' },
-        _react2.default.createElement('canvas', { className: 'canvas', ref: 'canvas', width: this.state.widthCanvas, height: this.state.heightCanvas, onClick: this.canvasClick }),
+        _react2.default.createElement('canvas', { className: 'canvas', ref: 'canvas', width: this.state.widthCanvas, height: this.state.heightCanvas, onClick: this.canvasClick, onMouseMove: this.canvasMove }),
         _react2.default.createElement(
           'div',
           null,
