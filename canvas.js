@@ -162,7 +162,7 @@ canvasMove (e) {
         arrLength++;
         this.updateCanvas();
       } 
-      else console.log('not element to arrLines')
+      else alert('not element to arrLines')
   }
 // **************************************************
   redoClick() {
@@ -170,11 +170,11 @@ canvasMove (e) {
       arrLength--;
       this.updateCanvas();
     } 
-    else console.log('arrLines is max')
+    else alert('arrLines is max')
   }
 // ************************************************** 
   saveClick() {
-    console.log(typeof(Storage));
+
     if (typeof(Storage) !== "undefined") {
       let ObjLines = JSON.stringify(tempArray);
       localStorage.setItem("drawLines", ObjLines);
@@ -188,6 +188,21 @@ canvasMove (e) {
       arrLines = JSON.parse(ObjLines);
       arrLength = 0;
       this.updateCanvas();
+
+      let maxHeight = '';
+      let maxWidth  = '';
+      tempArray = arrLines.slice(0, arrLines.length -arrLength);
+      for (let i=0; i< tempArray.length; i++) {
+        if (tempArray[i].x1 > maxWidth) maxWidth = tempArray[i].x1
+          if (tempArray[i].y1 > maxWidth) maxWidth = tempArray[i].y1
+        
+        if (tempArray[i].x2 > maxHeight) maxHeight = tempArray[i].x2
+          if (tempArray[i].y2 >maxHeight) maxHeight = tempArray[i].y2    
+      }
+          this.setState({
+            widthCanvas: maxWidth, 
+            heightCanvas: maxHeight});
+
     } else alert('no saved items');
     
   }
@@ -208,9 +223,11 @@ canvasMove (e) {
   }  
 
 // **************************************************
-  onSubmit(e) {
+  onSubmit() {
     let maxHeight = '';
     let maxWidth  = '';
+    if (this.widthCanvasChange.value >= 300){
+      if (this.heightCanvasChange.value >= 150) {
     tempArray = arrLines.slice(0, arrLines.length -arrLength);
     for (let i=0; i< tempArray.length; i++) {
       if (tempArray[i].x1 > maxWidth) maxWidth = tempArray[i].x1
@@ -227,6 +244,8 @@ canvasMove (e) {
           modalIsOpen: false});
       } else alert('Height must be greater than ' + maxHeight);
     } else alert('Width must be greater than ' + maxWidth);
+  } else alert('Height must be greater than ' + 150);
+} else alert('Width must be greater than ' + 300);
   }
   
 // **************************************************

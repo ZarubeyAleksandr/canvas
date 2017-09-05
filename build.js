@@ -10521,8 +10521,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 "use strict";
 
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = __webpack_require__(32);
@@ -10725,7 +10723,7 @@ var Canvas = function (_Component) {
       if (arrLines.length > arrLength) {
         arrLength++;
         this.updateCanvas();
-      } else console.log('not element to arrLines');
+      } else alert('not element to arrLines');
     }
     // **************************************************
 
@@ -10735,14 +10733,14 @@ var Canvas = function (_Component) {
       if (arrLength > 0) {
         arrLength--;
         this.updateCanvas();
-      } else console.log('arrLines is max');
+      } else alert('arrLines is max');
     }
     // ************************************************** 
 
   }, {
     key: 'saveClick',
     value: function saveClick() {
-      console.log(typeof Storage === 'undefined' ? 'undefined' : _typeof(Storage));
+
       if (typeof Storage !== "undefined") {
         var ObjLines = JSON.stringify(tempArray);
         localStorage.setItem("drawLines", ObjLines);
@@ -10758,6 +10756,20 @@ var Canvas = function (_Component) {
         arrLines = JSON.parse(ObjLines);
         arrLength = 0;
         this.updateCanvas();
+
+        var maxHeight = '';
+        var maxWidth = '';
+        tempArray = arrLines.slice(0, arrLines.length - arrLength);
+        for (var i = 0; i < tempArray.length; i++) {
+          if (tempArray[i].x1 > maxWidth) maxWidth = tempArray[i].x1;
+          if (tempArray[i].y1 > maxWidth) maxWidth = tempArray[i].y1;
+
+          if (tempArray[i].x2 > maxHeight) maxHeight = tempArray[i].x2;
+          if (tempArray[i].y2 > maxHeight) maxHeight = tempArray[i].y2;
+        }
+        this.setState({
+          widthCanvas: maxWidth,
+          heightCanvas: maxHeight });
       } else alert('no saved items');
     }
 
@@ -10789,25 +10801,29 @@ var Canvas = function (_Component) {
 
   }, {
     key: 'onSubmit',
-    value: function onSubmit(e) {
+    value: function onSubmit() {
       var maxHeight = '';
       var maxWidth = '';
-      tempArray = arrLines.slice(0, arrLines.length - arrLength);
-      for (var i = 0; i < tempArray.length; i++) {
-        if (tempArray[i].x1 > maxWidth) maxWidth = tempArray[i].x1;
-        if (tempArray[i].y1 > maxWidth) maxWidth = tempArray[i].y1;
+      if (this.widthCanvasChange.value >= 300) {
+        if (this.heightCanvasChange.value >= 150) {
+          tempArray = arrLines.slice(0, arrLines.length - arrLength);
+          for (var i = 0; i < tempArray.length; i++) {
+            if (tempArray[i].x1 > maxWidth) maxWidth = tempArray[i].x1;
+            if (tempArray[i].y1 > maxWidth) maxWidth = tempArray[i].y1;
 
-        if (tempArray[i].x2 > maxHeight) maxHeight = tempArray[i].x2;
-        if (tempArray[i].y2 > maxHeight) maxHeight = tempArray[i].y2;
-      }
-      if (this.widthCanvasChange.value >= maxWidth) {
-        if (this.heightCanvasChange.value >= maxHeight) {
-          this.setState({
-            widthCanvas: this.widthCanvasChange.value,
-            heightCanvas: this.heightCanvasChange.value,
-            modalIsOpen: false });
-        } else alert('Height must be greater than ' + maxHeight);
-      } else alert('Width must be greater than ' + maxWidth);
+            if (tempArray[i].x2 > maxHeight) maxHeight = tempArray[i].x2;
+            if (tempArray[i].y2 > maxHeight) maxHeight = tempArray[i].y2;
+          }
+          if (this.widthCanvasChange.value >= maxWidth) {
+            if (this.heightCanvasChange.value >= maxHeight) {
+              this.setState({
+                widthCanvas: this.widthCanvasChange.value,
+                heightCanvas: this.heightCanvasChange.value,
+                modalIsOpen: false });
+            } else alert('Height must be greater than ' + maxHeight);
+          } else alert('Width must be greater than ' + maxWidth);
+        } else alert('Height must be greater than ' + 150);
+      } else alert('Width must be greater than ' + 300);
     }
 
     // **************************************************
