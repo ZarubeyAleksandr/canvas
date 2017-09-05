@@ -10634,7 +10634,6 @@ var Canvas = function (_Component) {
       var ctx = this.refs.canvas.getContext('2d');
       ctx.beginPath();
       ctx.moveTo(x1, x2);
-      console.log(x1, x2, y1, y2);
       ctx.lineTo(y1, y2);
       ctx.lineWidth = width;
       ctx.strokeStyle = color;
@@ -10725,18 +10724,22 @@ var Canvas = function (_Component) {
   }, {
     key: 'saveClick',
     value: function saveClick() {
-      var ObjLines = JSON.stringify(tempArray);
-      localStorage.setItem("drawLines", ObjLines);
+      if (tempArray.length > 0) {
+        var ObjLines = JSON.stringify(tempArray);
+        localStorage.setItem("drawLines", ObjLines);
+      } else alert('no items');
     }
     // **************************************************
 
   }, {
     key: 'openClick',
     value: function openClick() {
-      var ObjLines = localStorage.getItem("drawLines");
-      arrLines = JSON.parse(ObjLines);
-      arrLength = 0;
-      this.updateCanvas();
+      if (tempArray.length > 0) {
+        var ObjLines = localStorage.getItem("drawLines");
+        arrLines = JSON.parse(ObjLines);
+        arrLength = 0;
+        this.updateCanvas();
+      } else alert('no saved items');
     }
 
     // **************************************************
@@ -10775,8 +10778,8 @@ var Canvas = function (_Component) {
         if (tempArray[i].x1 > maxWidth) maxWidth = tempArray[i].x1;
         if (tempArray[i].y1 > maxWidth) maxWidth = tempArray[i].y1;
 
-        if (tempArray[i].x1 > maxHeight) maxHeight = tempArray[i].x2;
-        if (tempArray[i].y1 > maxHeight) maxHeight = tempArray[i].y2;
+        if (tempArray[i].x2 > maxHeight) maxHeight = tempArray[i].x2;
+        if (tempArray[i].y2 > maxHeight) maxHeight = tempArray[i].y2;
       }
       if (this.widthCanvasChange.value >= maxWidth) {
         if (this.heightCanvasChange.value >= maxHeight) {
